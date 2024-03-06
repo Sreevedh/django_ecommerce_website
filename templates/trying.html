@@ -1,0 +1,14 @@
+{% for items in cart %}
+{% if request.user.is_authenticated and request.user.pk == items.user_id and product.pk == items.product_id %}
+    <a href="#"><button>Go to cart</button></a>
+{% elif request.user.is_authenticated and request.user.pk != items.user_id and product.pk != items.product_id %}
+  <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a>
+{% else %}
+  <!-- <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a> -->
+{% endif %}
+{% endfor %}
+
+
+{% if not request.user.is_authenticated  %}
+<a href="{% url 'ecommerce:login_user' %}"><button>Login to add to cart</button></a>
+{% endif %}

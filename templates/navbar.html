@@ -1,0 +1,51 @@
+{% load static %}
+{% if request.user.is_authenticated and request.user.username == "sree"%}
+<div class="navbar">
+    <div class="logo">
+        <a href="#home">EvoFrag</a>
+    </div>
+    <div>
+        <a href="{% url 'ecommerce:home' %}">Home</a>
+        <a href="{% url 'ecommerce:product_register' %}">Product</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="right-icons">
+        <img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30">
+    </div>
+{% elif request.user.is_authenticated %}
+<div class="navbar">
+    <div class="logo">
+        <a href="#home">EvoFrag</a>
+    </div>
+    <div>
+        <a href="{% url 'ecommerce:home' %}">Home</a>
+        <!-- <a href="#product">Product</a> -->
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="right-icons">
+        <a href="{% url 'ecommerce:go_to_cart' %}" class="right">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count">{{ quantity }}</span>
+        </a>
+        <img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30">
+    </div>
+{% else %}
+<div class="navbar">
+    <div class="logo">
+        <a href="#home">EvoFrag</a>
+    </div>
+    <div>
+        <a href="{% url 'ecommerce:home' %}">Home</a>
+        <!-- <a href="#product">Product</a> -->
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="right-icons">
+        <a href="{% url 'ecommerce:login_user' %}" class="right">Login</a>
+        <a href="{% url 'ecommerce:register_user' %}" class="right">Register</a>
+    </div>
+{% endif %}
+
+</div>
