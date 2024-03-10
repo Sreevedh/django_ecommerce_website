@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home, register_user, login_user, product_register, add_to_cart, go_to_cart, increase_cart_items, decrease_cart_items, remove_from_cart
+from .views import home, register_user, login_user, product_register, add_to_cart, go_to_cart, increase_cart_items, decrease_cart_items, remove_from_cart, product_detail_tab, profile_page, password_change_done
 
-
+from django.contrib.auth import views as auth_views
 app_name = 'ecommerce_app'
 urlpatterns = [
     path('', home, name='home'),
@@ -14,5 +14,15 @@ urlpatterns = [
     path('increase_cart_items/<int:cart_pk>/', increase_cart_items, name='increase_cart_items'),
     path('decrease_cart_items/<int:cart_pk>/', decrease_cart_items, name='decrease_cart_items'),
     path('remove_from_cart/<int:cart_pk>/', remove_from_cart, name='remove_from_cart'),
+    path('product_detail/<int:product_id>/',product_detail_tab,name='product_detail_tab'),
+    path('profile_page/<int:profile_id>',profile_page, name='profile_page'),
+
+    # path('change_password/', auth_views.PasswordChangeView.as_view(template_name='change_password.html'))
+      path('change-password/', auth_views.PasswordChangeView.as_view(
+        template_name='change_password.html',
+        success_url='/change-password/done/'
+    ), name='password_change'),
+
+     path('change-password/done/', password_change_done, name='password_change_done'),
 
 ]

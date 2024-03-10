@@ -11,7 +11,7 @@
         <a href="#contact">Contact</a>
     </div>
     <div class="right-icons">
-        <img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30">
+        <a href="{% url 'ecommerce:profile_page' request.user.id %}"><img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30"></a>
     </div>
 {% elif request.user.is_authenticated %}
 <div class="navbar">
@@ -29,7 +29,7 @@
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="cart-count">{{ quantity }}</span>
         </a>
-        <img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30">
+        <a href="{% url 'ecommerce:profile_page' request.user.id %}"><img src="{{ request.user.profile_picture.url }}" alt="User Image" width="30" height="30"></a>
     </div>
 {% else %}
 <div class="navbar">

@@ -28,7 +28,7 @@
                 <a href="{% url 'ecommerce:increase_cart_items' items.pk %}"><button>+</button></a>
             </td>
             <td>${{ items.total_price }}</td>
-            <td><a href="{% url 'ecommerce:remove_from_cart' items.pk %}" class="checkout">Remove from cart</a></td>
+            <td><a href="{% url 'ecommerce:remove_from_cart' items.pk %}" class="checkout" style="background-color: #FF6347;">Remove from cart</a></td>
             
         </tr>
 

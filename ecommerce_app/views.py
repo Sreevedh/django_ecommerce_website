@@ -1,31 +1,33 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .forms import UserForm, ProductForm
 from .models import User, Cart, Product
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 # Create your views here.
 
 
-# HOME, UserRegistration and Login
+########### Home, UserRegistration and Login ################
 def home(request):
     products = Product.objects.all()
     cart = Cart.objects.all()
-    cart_none = Cart.objects.none()
-    c_cart = list(cart.union(cart_none))
-    print(c_cart)
-
-    print(c_cart)
+    cart_product_id = []
     quantity = 0
     if request.user.is_authenticated:
         user_id = request.user.id
         quantity = Cart.objects.filter(user_id=user_id).count()
-    
+
+        cart_filter = Cart.objects.filter(user_id=user_id)
+        for id in cart_filter:
+            cart_product_id.append(id.product_id)
+
+    # print(cart_id)
     context = {
         'products': products,
         'quantity': quantity,
-        'cart': cart
+        'cart_product_id': cart_product_id
     }
     return render(request, 'home.html', context)
 
@@ -73,7 +75,7 @@ def product_register(request):
     return render(request, 'product_register.html', {'form': form})
 
 
-##### cart #####
+################### Cart ################
 @login_required
 def add_to_cart(request,product_pk):
     if request.user.is_authenticated:
@@ -125,6 +127,11 @@ def increase_cart_items(request, cart_pk):
 def decrease_cart_items(request, cart_pk):
     cart = Cart.objects.get(pk=cart_pk)
     cart.quantity -= 1
+    if cart.quantity == 0:
+        cart = Cart.objects.get(pk=cart_pk)
+        cart.delete()
+        return redirect('ecommerce:go_to_cart')
+    
     cart.total_price -= cart.price
     cart.save()
     return redirect('ecommerce:go_to_cart')
@@ -136,5 +143,57 @@ def remove_from_cart(request, cart_pk):
     cart.delete()
     return redirect('ecommerce:go_to_cart')
 
+##################### Product Details Page ##################
+
+def product_detail_tab(request, product_id):
+    # product = get_object_or_404(Product, id=product_id)
+    product = Product.objects.get(id = product_id)
+    cart_list = []
+    user_id = request.user.id
+    quantity = Cart.objects.filter(user_id=user_id).count()
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        cart_product_id = Cart.objects.filter(user_id = user_id)
+        for i in cart_product_id:
+            cart_list.append(i.product_id)
+    
+    context = {
+        'product': product,
+        'cart':cart_list,
+        'quantity':quantity
+     }
+    return render(request, 'product_details.html', context)
+
+
+
+############################## Profile Page ######################################
+@login_required
+def profile_page(request, profile_id):
+    if request.user.is_authenticated:
+        user = User.objects.get(pk = profile_id)
+        quantity = Cart.objects.filter(user_id = profile_id).count()
+        context ={
+            'user':user,
+            'quantity':quantity
+        }
+        return render(request, 'profile.html', context)
+    else:
+        return redirect('ecommerce:home')
+
+@login_required  
+def update_username(request):
+    pass
+
+@login_required
+def change_profile_picture(request):
+    pass
+
+@login_required
+def change_password(request):
+    pass
+
+@login_required
+def password_change_done(request):
+    return HttpResponse('Success')
 
 

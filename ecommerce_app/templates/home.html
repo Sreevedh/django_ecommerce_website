@@ -44,32 +44,26 @@
         <div class="product-card">
             <img class="product-image" src="{{ product.product_image.url }}" alt="Products">
             <div class="product-info">
-                <div class="product-name">{{ product.product_name }}</div>
+                <a href="{% url 'ecommerce:product_detail_tab' product.pk %}"><div class="product-name">{{ product.product_name }}</div></a>
                 <div class="product-description">{{ product.product_details }}</div>
                 <div class="product-price">${{ product.product_price }}</div>
             </div>
           
-            
-            
             <div class="button-card">
               {% csrf_token %}
-              {% if request.user.is_authenticated %}
-
-              {% for cart in cart %}
-                    {% if request.user.pk == cart.user_id and product.pk == cart.product_id %}
-                      <a href="#"><button>Go to cart</button></a>
-              
+                  {% if request.user.is_authenticated %}
+                    {% if product.pk in cart_product_id %}
+                    <a href="{% url 'ecommerce:go_to_cart' %}"><button style="background-color: #ff6f61">Go to cart</button></a>
+                    {% else %}
                     <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a>
-                    {% elif request.user.pk == cart.user_id and product.pk != cart.product_id %}
-                    
                     {% endif %}
-              {% endfor %}
+                  {% endif %}
+
+                  {% if not request.user.is_authenticated %}
+                  <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a>
+                  {% endif %}
+
                   <!-- <p>{{ product.pk }}</p> -->
-                
-              {% else %}
-                <a href="{% url 'ecommerce:login_user' %}"><button>Login to add to cart</button></a>
-                
-              {% endif %}
             </div>
         </div>
         
