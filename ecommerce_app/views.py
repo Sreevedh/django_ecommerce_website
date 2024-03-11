@@ -182,18 +182,40 @@ def profile_page(request, profile_id):
 
 @login_required  
 def update_username(request):
-    pass
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            user = User.objects.get(id=request.user.id)
+            user_id = user.id
+            username = request.POST['username']
+            user.username = username
+            user.save()
+            return redirect('ecommerce:profile_page', profile_id=user_id)
+    return render(request, 'update_username.html')
 
 @login_required
-def change_profile_picture(request):
-    pass
+def update_profile_pic(request):
+    if request.method == 'POST':
+        user = User.objects.get(id=request.user.id)
+        user_id = user.id
 
+        if request.FILES:
+            existing_pro_pic = user.profile_picture
+            existing_pro_pic.delete(save=True)
+            print("hi")
+            profile_picture = request.FILES['profile_picture']
+            user.profile_picture = profile_picture
+            user.save()
+            return redirect('ecommerce:profile_page', profile_id=user_id)
+        else:
+            return HttpResponse('Please select a file')
+        
+    return render(request, 'update_profile_pic.html')
 @login_required
 def change_password(request):
     pass
 
 @login_required
 def password_change_done(request):
-    return HttpResponse('Success')
+    return redirect('ecommerce:home')
 
 
