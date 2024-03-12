@@ -3,74 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+        .card-main-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-.profile-container {
-    display: flex;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        .card {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.profile-details {
-    text-align: center;
-}
-
-.rounded-profile {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-h2 {
-    color: #333;
-}
-
-.profile-actions {
-    margin-top: 20px;
-}
-
-button {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #1c6da8;
-}
-
+        .green-tick {
+            color: green;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
     </style>
+    <title>Payment Success</title>
 </head>
 <body>
-
-  <div class="profile-container">
-    <div class="profile-details">
-      <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-profile">
-      <h2>{{ user.username }}</h2>
-    </div>
-    <div class="profile-actions">
-      <a href="{% url 'update_profile' %}"><button>Update Profile</button></a>
-      <a href="{% url 'change_password' %}"><button>Change Password</button></a>
-      <a href="{% url 'change_profile_picture' %}"><button>Change Profile Picture</button></a>
+<div class="card-main-body">
+  <div class="card">
+    <div class="green-tick">&#10004;</div>
+    <div>
+        <p>Your payment is successful.</p>
+        <p>Transaction ID: T2403120941246680507857</p>
     </div>
   </div>
+</div>
+
 
 </body>
 </html>
+
+
+
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-main-body">
+    <div class="card">
+      <div class="green-tick">&#10004;</div>
+      <div>
+          <p>Your payment is successful.</p>
+          <p>{{ transact_id }}</p>
+          <p> You paid : {{ amount }}</p>
+      </div>
+    </div>
+</div>
+<div>
+    <a href="{% url 'ecommerce:home' %}">Go to home page</a>
+</div>
+{% endblock %}
+
+
+
+
+   <!-- Product 1 -->
+   {% for product in  %}
+   <div class="product-card">
+     <img class="product-image" src="{{ product.product_image.url }}" alt="Products">
+     <div class="product-info">
+         <a href="{% url 'ecommerce:product_detail_tab' product.pk %}"><div class="product-name">{{ product.product_name }}</div></a>
+         <div class="product-description">{{ product.product_details }}</div>
+         <div class="product-price">${{ product.product_price }}</div>
+     </div>
+   
+     <div class="button-card">
+       {% csrf_token %}
+           {% if request.user.is_authenticated %}
+             {% if product.pk in cart_product_id %}
+             <a href="{% url 'ecommerce:go_to_cart' %}"><button style="background-color: #ff6f61">Go to cart</button></a>
+             {% else %}
+             <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a>
+             {% endif %}
+           {% endif %}
+
+           {% if not request.user.is_authenticated %}
+           <a href="{% url 'ecommerce:add_to_cart' product.pk %}"><button>Add to cart</button></a>
+           {% endif %}
+
+           <!-- <p>{{ product.pk }}</p> -->
+     </div>
+   </div>
+   {% endfor %}
+ 

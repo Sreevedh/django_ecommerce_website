@@ -37,5 +37,5 @@
     </tbody>
 </table>
 <div class="total">Total: {{ total_price }}</div>
-<a href="#" class="checkout">Proceed to Checkout</a>
+<a href="{% url 'ecommerce:proceed_to_checkout' %}" class="checkout">Proceed to Checkout</a>
 {% endblock %}
