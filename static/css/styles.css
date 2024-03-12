@@ -311,3 +311,28 @@ h1 {
   .profile-actions button {
     margin: 0 10px; /* Adjust the margin as needed */
   }
+
+
+
+  /* Payment Successful */
+.card-main-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.card {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.green-tick {
+    color: green;
+    font-size: 48px;
+    margin-bottom: 10px;
+}

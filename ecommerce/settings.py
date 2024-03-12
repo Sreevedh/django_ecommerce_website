@@ -132,3 +132,6 @@ AUTH_USER_MODEL = 'ecommerce_app.User'
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "ecommerce_app/media"
+
+LOGIN_URL = 'ecommerce:login_user'
+LOGIN_REDIRECT_URL = 'ecommerce:payment_return'

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import home, register_user, login_user, product_register, add_to_cart, go_to_cart, increase_cart_items, decrease_cart_items, remove_from_cart, product_detail_tab, profile_page, password_change_done, update_profile_pic, update_username
+from .views import home, register_user, login_user, product_register, add_to_cart, go_to_cart, increase_cart_items, decrease_cart_items, remove_from_cart, product_detail_tab, profile_page, password_change_done, update_profile_pic, update_username, pay, payment_return, proceed_to_checkout, logout_view
 
 from django.contrib.auth import views as auth_views
 app_name = 'ecommerce_app'
@@ -18,7 +18,7 @@ urlpatterns = [
     path('profile_page/<int:profile_id>',profile_page, name='profile_page'),
     path('update_profile_pic/',update_profile_pic, name='update_profile_pic'),
     path('update_username/',update_username, name='update_username'),
-    
+
     # path('change_password/', auth_views.PasswordChangeView.as_view(template_name='change_password.html'))
       path('change-password/', auth_views.PasswordChangeView.as_view(
         template_name='change_password.html',
@@ -26,5 +26,11 @@ urlpatterns = [
     ), name='password_change'),
 
      path('change-password/done/', password_change_done, name='password_change_done'),
+
+     path('proceed-to-checkout/', proceed_to_checkout, name='proceed_to_checkout'),
+     path('return-to-me/', payment_return, name='payment_return'),
+     path('pay/', pay, name='pay'),
+     path('logoutpage/', logout_view, name='logout')
+    #  path('add_to_cart_in')
 
 ]

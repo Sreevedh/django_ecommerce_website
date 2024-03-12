@@ -20,7 +20,7 @@
       {% endif %}
       {% endif %}
 
-      {% if not request.user.is_authenticated %}\
+      {% if not request.user.is_authenticated %}
       <a href="{% url 'ecommerce:login_user' %}"><button class="add-to-cart-btn">Login to Add to Cart</button></a>
       {% endif %}
     </div>

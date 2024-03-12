@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-main-body">
+    <div class="card">
+      <div class="green-tick">&#10004;</div>
+      <div>
+          <p>Your payment is successful.</p>
+          <p>{{ transact_id }}</p>
+          <p> You paid : {{ amount }}</p>
+      </div>
+    </div>
+    <div>
+        <a href="{% url 'ecommerce:home' %}">Go to home page</a>
+    </div>
+</div>
+
+{% endblock %}
