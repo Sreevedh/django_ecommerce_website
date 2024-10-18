@@ -12,9 +12,6 @@ pipeline {
 
     stages {
         stage('Checkout Code') {
-            when{
-                branch 'main'
-            }
             steps {
                 // Pull code from GitHub
                 git url: "${GITHUB_REPO}", branch: 'main' // Specify the branch to pull from
