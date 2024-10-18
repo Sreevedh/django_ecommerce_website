@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'slave' // Use a Jenkins agent labeled "slave"
-    }
+    agent any
 
     environment {
         // Define environment variables
