@@ -1,0 +1,11 @@
+services:
+  blogapp:
+    container_name: blog
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:  
+      - DEBUG=1
+
