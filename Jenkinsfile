@@ -57,20 +57,6 @@ pipeline {
       }
     }
 
-    stage('Push to Docker Private Repo') {
-      steps {
-        script {
-          withEnv(["DOCKER_HOST=${DOCKER_HOST}"]) {
-            docker.withRegistry('192.168.33.25:5000', "${DOCKER_CREDENTIALS_ID}") {
-              // Push the built image to the Docker registry
-              sh 'docker push ${DOCKER_IMAGE}'
-            }
-          }
-        }
-
-      }
-    }
-
   post {
     success {
       echo 'Pipeline completed successfully.'
