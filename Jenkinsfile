@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE = '192.168.33.25:5000/blog' // Your Docker image name (with registry IP)
         GITHUB_REPO = 'https://github.com/Sreevedh/django_ecommerce_website.git' // Your GitHub repository URL
         DOCKER_COMPOSE_FILE = 'docker-compose.yaml' // Path to your Docker Compose file
-        DOCKER_HOST = '192.168.33.10' // TCP URL for Docker host
+        DOCKER_HOST = '192.168.33.15' // TCP URL for Docker host
     }
 
     stages {
@@ -22,8 +22,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using the Dockerfile
-                    // Set Docker environment variables
+                    echo "building the docker image"
                     withEnv(["DOCKER_HOST=${DOCKER_HOST}"]) {
                         sh 'docker build -t ${DOCKER_IMAGE} .'
                     }
@@ -48,7 +47,6 @@ pipeline {
                 script {
                     // Deploy using Docker Compose
                     withEnv(["DOCKER_HOST=${DOCKER_HOST}"]) {
-                        sh "docker pull ${DOCKER_IMAGE}"
                         sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d" // -d for detached mode
                     }
                 }
