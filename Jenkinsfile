@@ -1,6 +1,7 @@
 pipeline {
-    agent {
-        label 'slave'
+  agent {
+    node {
+      label 'slave'
     }
 
     environment {
@@ -52,14 +53,32 @@ pipeline {
                 }
             }
         }
+
+      }
     }
-    post {
-        // Post actions to execute after the pipeline completes
-        success {
-            echo 'Pipeline completed successfully.'
+
+    stage('Push to Docker Private Repo') {
+      steps {
+        script {
+          withEnv(["DOCKER_HOST=${DOCKER_HOST}"]) {
+            docker.withRegistry('192.168.33.25:5000', "${DOCKER_CREDENTIALS_ID}") {
+              // Push the built image to the Docker registry
+              sh 'docker push ${DOCKER_IMAGE}'
+            }
+          }
         }
-        failure {
-            echo 'Pipeline failed. Check the logs for details.'
-        }
+
+      }
     }
+
+  post {
+    success {
+      echo 'Pipeline completed successfully.'
+    }
+
+    failure {
+      echo 'Pipeline failed. Check the logs for details.'
+    }
+
+  }
 }
