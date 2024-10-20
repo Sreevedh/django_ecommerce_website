@@ -34,7 +34,8 @@ pipeline {
             steps {
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh """
-                    ls /home/vagrant
+                    ls
+                    echo "hello"
                     """
                 }
             }
