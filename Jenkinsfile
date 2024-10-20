@@ -46,7 +46,7 @@ pipeline {
                        script{
                             sh """
                                 ls
-                               docker build -t ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
+                               docker build -t ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
                              """
                         }
                        
