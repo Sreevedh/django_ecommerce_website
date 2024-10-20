@@ -18,6 +18,7 @@ pipeline {
             steps {
                 git branch: 'main', url: "${GIT_REPO_URL}"
                 sh """
+                docker login -u vagrant -p vagrant 192.168.33.25:5000
                 docker build -t ${DOCKER_REPO} .
                 docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                 docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
