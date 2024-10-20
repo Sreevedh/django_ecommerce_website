@@ -17,12 +17,11 @@ pipeline {
         stage('Clone Git Repository') {
             steps {
                 git branch: 'main', url: "${GIT_REPO_URL}"
-                // sh """
-                // docker login -u vagrant -p vagrant 192.168.33.25:5000
-                // docker build -t ${DOCKER_REPO} .
-                // docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                // docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                // """
+                sh """
+                docker build -t ${DOCKER_REPO} .
+                docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                """
             }
         }
         // sh """
@@ -32,13 +31,13 @@ pipeline {
         //             docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
         //             """
         
-        stage('Build Docker Image on Docker VM and pushing to registry') {
-            steps {
-                sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
-                    sh "ls"
-                }
-            }
-        }
+        // stage('Build Docker Image on Docker VM and pushing to registry') {
+        //     steps {
+        //         sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
+        //             sh "ls"
+        //         }
+        //     }
+        // }
 
     }
 }
