@@ -17,27 +17,27 @@ pipeline {
         stage('Clone Git Repository') {
             steps {
                 git branch: 'main', url: "${GIT_REPO_URL}"
-                sh """
-                docker build -t ${DOCKER_REPO} .
-                docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                """
+                // sh """
+                // docker build -t ${DOCKER_REPO} .
+                // docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                // docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                // """
             }
         }
-        // sh """
-        //             ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP} \
-        //             'ls && docker build -t ${DOCKER_REPO} .'
-        //             docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-        //             docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-        //             """
+
         
-        // stage('Build Docker Image on Docker VM and pushing to registry') {
-        //     steps {
-        //         sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
-        //             sh "ls"
-        //         }
-        //     }
-        // }
+        stage('Build Docker Image on Docker VM and pushing to registry') {
+            steps {
+                sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP} \
+                        'ls && docker build -t ${DOCKER_REPO} .'
+                        docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                        docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                        """
+                }
+            }
+        }
 
     }
 }
