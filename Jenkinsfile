@@ -43,10 +43,11 @@ pipeline {
         
         stage('Build Docker Image on Docker VM and pushing to registry') {
             steps {
-                        sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
+                       script{
                             sh """
-                           echo "hello"
-                         """
+                               docker build -t ${DOCKER_REPO} .
+                               docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                             """
                         }
                        
             }
