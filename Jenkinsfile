@@ -49,6 +49,16 @@ pipeline {
             }
             
         }
+        stage('Pulling from docker repo and deploying'){
+            steps{
+                script{
+                    sh """
+                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP} \
+                    'docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}'
+                    """
+                }
+            }
+        }
 
     }
 }
