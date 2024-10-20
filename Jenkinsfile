@@ -11,6 +11,9 @@ pipeline {
         GIT_REPO_URL = 'https://github.com/Sreevedh/django_ecommerce_website.git' // Your Git repository URL
         DOCKER_IMAGE_TAG = 'latest' // Tag for your Docker image
         SSH_CREDENTIALS_ID = 'docker_repo' // ID of your SSH credentials in Jenkins
+
+        DOCKER_PASSWORD='dockerpass'
+        DOCKER_USERNAME='dockeruser'
     }
 
     stages {
@@ -34,7 +37,7 @@ pipeline {
             steps {
                     sh """
                         docker build -t ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
-                        echo $DOCKER_PASSWORD | docker login 192.168.33.25:5000 --username $DOCKER_USERNAME --password-stdin
+                        echo ${DOCKER_PASSWORD} | docker login 192.168.33.25:5000 --username ${DOCKER_USERNAME} --password-stdin
                         docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                         """
                 }
