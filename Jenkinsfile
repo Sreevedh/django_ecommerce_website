@@ -6,6 +6,7 @@ pipeline {
     environment {
         DOCKER_VM_IP = '192.168.33.25' // IP address of your Docker VM
         DOCKER_VM_PORT = '5000'
+        DOCKER_DEPLOY_VM = '192.168.33.15'
         DOCKER_REPO = 'blog' // Docker repository name
         GIT_REPO_URL = 'https://github.com/Sreevedh/django_ecommerce_website.git' // Your Git repository URL
         DOCKER_IMAGE_TAG = 'latest' // Tag for your Docker image
@@ -51,9 +52,9 @@ pipeline {
         }
         stage('Pulling from docker repo and deploying'){
             steps{
-                script{
+                sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP} \
+                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} \
                     'docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}'
                     """
                 }
