@@ -37,7 +37,7 @@ pipeline {
             steps {
                     sh """
                         docker build -t ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
-                        echo ${DOCKER_PASSWORD} | docker login 192.168.33.25:5000 --username ${DOCKER_USERNAME} --password-stdin
+                        'echo ${DOCKER_PASSWORD} | docker login 192.168.33.25:5000 --username ${DOCKER_USERNAME} --password-stdin'
                         docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                         """
                 }
