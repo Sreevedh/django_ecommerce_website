@@ -8,7 +8,7 @@ pipeline {
         git(url: 'https://github.com/Sreevedh/django_ecommerce_website.git', branch: 'main')
       }
     }
-    stage(build){
+    stage('build'){
       steps{
         docker.build('blog')
       }
