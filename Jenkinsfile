@@ -28,19 +28,20 @@ pipeline {
             }
         }
 
-        // sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
-         // ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP} \
-         //       'ls &&
-        // }
+        
         
         stage('Build Docker Image on Docker VM and pushing to registry') {
             steps {
-                    sh """
-                        docker build -t ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
-                        'echo ${DOCKER_PASSWORD} | docker login 192.168.33.25:5000 --username ${DOCKER_USERNAME} --password-stdin'
-                        docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                        """
-                }
+                        sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
+                            sh """
+                            ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP}
+                            ls
+                           
+                            
+                         """
+                        }
+                       
+            }
             
         }
 
