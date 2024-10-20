@@ -35,9 +35,9 @@ pipeline {
                         sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                             sh """
                             ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP}
-                            ls
-                           
-                            
+                            docker build -t ${DOCKER_REPO} .
+                            docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                            docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                          """
                         }
                        
