@@ -6,7 +6,6 @@ pipeline {
     environment {
         DOCKER_VM_IP = '192.168.33.25' // IP address of your Docker VM
         DOCKER_VM_PORT = '5000'
-        BUILD_NUMBER = 'v1.0'
         DOCKER_REPO = 'blog' // Docker repository name
         GIT_REPO_URL = 'https://github.com/Sreevedh/django_ecommerce_website.git' // Your Git repository URL
         DOCKER_IMAGE_TAG = 'latest' // Tag for your Docker image
