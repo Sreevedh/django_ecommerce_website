@@ -11,6 +11,7 @@ pipeline {
         GIT_REPO_URL = 'https://github.com/Sreevedh/django_ecommerce_website.git' // Your Git repository URL
         DOCKER_IMAGE_TAG = 'latest' // Tag for your Docker image
         SSH_CREDENTIALS_ID = 'docker_repo' // ID of your SSH credentials in Jenkins
+        BUILD_NUMBER = 'latest'
     }
 
     stages {
@@ -41,12 +42,11 @@ pipeline {
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh '''
                         ssh -t -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
+                        docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} || false
                         docker container stop blog > /dev/null 2>&1 || true
                         docker container rm blog > /dev/null 2>&1 || true
-                        docker rmi $(docker images -q) > /dev/null 2>&1 || true
-                        docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                        docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} > > /dev/null 2>&1 || true
                         docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                        EOF
                         '''
                 }
             }
