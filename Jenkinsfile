@@ -40,7 +40,7 @@ pipeline {
             steps{
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
+                    ssh -t -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
                     docker container stop blog >> /dev/null
                     docker container remove blog >> /dev/null
                     docker rmi $(docker images -q)
