@@ -16,6 +16,9 @@ pipeline {
 
     stages {
         stage('Clone Git Repository') {
+          when {
+                branch 'main'
+            }
             steps {
                 git branch: 'main', url: "${GIT_REPO_URL}"
             }
