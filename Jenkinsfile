@@ -23,7 +23,7 @@ pipeline {
                 git branch: 'main', url: "${GIT_REPO_URL}"
             }
         }
-        
+
         
         stage('Build Docker Image on Docker VM and pushing to registry') {
             steps {
