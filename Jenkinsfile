@@ -24,7 +24,7 @@ pipeline {
             }
         }
 
-        
+    
         stage('Build Docker Image on Docker VM and pushing to registry') {
             steps {
                        script{
