@@ -41,14 +41,11 @@ pipeline {
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
-                    if [ $(docker ps -q -f name=blog) ]
-                    then
-                        docker container stop blog
-                        echo "stoopeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed".
-                        docker container remove blog
-                        echo "removveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeddddd."
-                        docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:$(( BUILD_NUMBER - 1 ))
-                    fi
+                    docker container stop blog >> /dev/null
+                    echo "stoopeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed".
+                    docker container remove blog >> /dev/null
+                    echo "removveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeddddd."
+                    docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:$(( BUILD_NUMBER - 1 ))
                     docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                     docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                     '''
