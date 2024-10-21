@@ -44,7 +44,9 @@ pipeline {
                     if [ $(docker ps -q -f name=blog) ]
                     then
                         docker container stop blog
+                        echo "stoopeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed".
                         docker container remove blog
+                        echo "removveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeddddd."
                         docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:$(( BUILD_NUMBER - 1 ))
                     fi
                     docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
