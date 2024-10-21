@@ -47,7 +47,6 @@ pipeline {
                     fi
                     docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                     docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                    EOF
                     '''
                 }
             }
