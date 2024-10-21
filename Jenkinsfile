@@ -43,7 +43,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
                     if [ $(docker ps -q -f name=blog) ]; then
                         docker container stop blog
-                        docker container rm blog
+                        docker container remove blog
                     fi
                     docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                     docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
