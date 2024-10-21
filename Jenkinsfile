@@ -40,14 +40,15 @@ pipeline {
             steps{
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM}<<EOF
+                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM}\
+                    "
                     if [ $(docker ps -q -f name=blog) ]; then
                         docker container stop blog
                         docker container rm blog
                     fi
                     docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                     docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                    EOF
+                    "
                     """
                 }
             }
