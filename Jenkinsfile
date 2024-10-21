@@ -17,25 +17,8 @@ pipeline {
         stage('Clone Git Repository') {
             steps {
                 git branch: 'main', url: "${GIT_REPO_URL}"
-                // sh """
-                // docker build -t ${DOCKER_REPO} .
-                // docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                // docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-                // """
             }
         }
-
-            //         steps {
-            //             sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
-            //                 sh """
-            //                 ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_VM_IP}
-            //                 docker build -t ${DOCKER_REPO} .
-            //                 docker image tag ${DOCKER_REPO} ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-            //                 docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
-            //              """
-            //             }
-                       
-            // }
         
         
         stage('Build Docker Image on Docker VM and pushing to registry') {
@@ -43,7 +26,10 @@ pipeline {
                        script{
                             sh """
                                docker build -t ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} .
+                               echo "build SUCCESSFUL"
                                docker push ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                               echo "PUSH TO REGISTRY SUCCESSFUL"
+                               docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                              """
                         }
                        
@@ -54,8 +40,14 @@ pipeline {
             steps{
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} \
-                    'docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}'
+                    ssh -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
+                    if [ $(docker ps -q -f name=blog) ]; then
+                        docker container stop blog
+                        docker container rm blog
+                    fi
+                    docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                    docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
+                    EOF
                     """
                 }
             }
