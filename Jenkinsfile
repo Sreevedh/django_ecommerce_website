@@ -13,7 +13,7 @@ pipeline {
         SSH_CREDENTIALS_ID = 'docker_repo' // ID of your SSH credentials in Jenkins
         BUILD_NUMBER = 'latest'
     }
-
+ 
     stages {
         stage('Clone Git Repository') {
           when {
