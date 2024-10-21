@@ -45,11 +45,11 @@ pipeline {
                 sshagent (credentials: ["${SSH_CREDENTIALS_ID}"]) {
                     sh '''
                         ssh -t -o StrictHostKeyChecking=no vagrant@${DOCKER_DEPLOY_VM} << EOF
+                        docker system prune
                         docker pull ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} || false
                         docker container stop blog > /dev/null 2>&1 || true
                         docker container rm blog > /dev/null 2>&1 || true
                         docker rmi ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER} >> /dev/null 2>&1 || true
-                        docker system prune
                         docker run -d -p 8000:8000 --name blog ${DOCKER_VM_IP}:${DOCKER_VM_PORT}/${DOCKER_REPO}:${BUILD_NUMBER}
                         '''
                 }
